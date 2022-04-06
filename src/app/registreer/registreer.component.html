@@ -1,0 +1,65 @@
+<!-- we binden naar het model registreerFormulier dankzij de [formGroup] directive, die verwijst naar de FormGroup instantie aan de model kant -->
+<!-- onSubmit event gaat in de form tag -->
+<!-- novalidate is een HTML5 attribuut die browser native form validation voorkomt -->
+<form novalidate [formGroup]="registreerFormulier" (ngSubmit)="doeIetsOnSubmit()">
+    <label>
+        Voornaam:
+        <!-- we binden de inputs naar de controls dankzij de formControlName directive(s) -->
+        <input type="text" formControlName="voornaam">
+    </label>
+    <!-- melding -->
+    <div *ngIf="voornaam.invalid && (voornaam.dirty || voornaam.touched)">
+        <div *ngIf="voornaam.errors?.['required']">
+            Voornaam moet ingevuld worden.
+        </div>
+        <div *ngIf="voornaam.errors?.['minlength']">
+            Voornaam moet minimum 3 tekens lang zijn.
+        </div>
+        <div *ngIf="voornaam.errors?.['is4Lang']">
+            Voornaam mag geen 4 tekens lang zijn.
+        </div>
+    </div>
+    <label>
+        Familienaam:
+        <input type="text" formControlName="familienaam">
+    </label>
+    <div *ngIf="familienaam.invalid && (familienaam.dirty || familienaam.touched)">
+        <div *ngIf="familienaam.errors?.['bestaatAl']">
+            Familienaam bestaat al.
+        </div>
+    </div>
+
+    <!-- bind een geneste groep -->
+    <div formGroupName="wachtwoordMatch">
+        <label>
+            Wachtwoord:
+            <input type="password" formControlName="wachtwoord" id="wachtwoord" placeholder="
+           nieuw wachtwoord">
+        </label>
+        <div *ngIf="wachtwoord.invalid && (wachtwoord.dirty || wachtwoord.touched)">
+            <div *ngIf="wachtwoord.errors?.['required']">
+                Wachtwoord is verplicht.
+            </div>
+        </div>
+        <label>
+            Herhaal wachtwoord:
+            <input type="password" formControlName="herhaalWachtwoord" placeholder="herhaal wachtwoord">
+        </label>
+        <div *ngIf="herhaalWachtwoord.invalid && (herhaalWachtwoord.dirty || herhaalWachtwoord.touched)">
+            <div *ngIf="herhaalWachtwoord.errors?.['required']">
+                herhaalWachtwoord is verplicht.
+            </div>
+        </div>
+    </div>
+    <div *ngIf="wachtwoordMatch.errors?.['misMatch'] && (herhaalWachtwoord?.touched || herhaalWachtwoord?.dirty)">
+        Wachtwoorden komen niet overeen.
+    </div>
+
+    <input type="submit" value="Submit" [disabled]="!registreerFormulier.valid">
+    <!-- <button  type="submit">Submit mij</button> -->
+</form>
+
+
+<p>
+    Formulier Status: {{ registreerFormulier.status }} - {{registreerFormulier.value | json}}
+</p>

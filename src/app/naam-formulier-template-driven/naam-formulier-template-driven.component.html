@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="form-group">
+        <label for="familienaam">Familienaam</label>
+        <input type="text" [(ngModel)]="persoon.familienaam" name="familienaam" #familienaam="ngModel"
+            class="formcontrol" id="familienaam" required minlength="4" verbodenNaam="Verboden">
+        <div *ngIf="familienaam.invalid && (familienaam.dirty || familienaam.touched)" cl ass="alert alert-danger">
+            <!-- de validatie wordt nu hierboven gedefinieerd in HTML zelf, niet in het model zoals bij reactive -->
+            <div *ngIf="familienaam.errors?.['required']">
+                Familienaam is verplicht.
+            </div>
+            <div *ngIf="familienaam.errors?.['minlength']">
+                Een familienaam moet minimum 4 tekens lang.
+            </div>
+            <!-- verwijst naar de verbodenNaam (directive?) hierboven -->
+            <div *ngIf="familienaam.errors?.['verbodenNaam']">
+                Familienaam kan niet "Verboden" zijn.
+            </div>
+        </div>
+    </div>
+</div>
